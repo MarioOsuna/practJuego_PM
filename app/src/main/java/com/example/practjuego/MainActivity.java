@@ -11,7 +11,7 @@ import android.widget.EditText;
 public class MainActivity extends AppCompatActivity {
 EditText editText;
 Button button;
-    static String NOMBRE="NOMBRE";
+   // static String NOMBRE="NOMBRE";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +27,8 @@ Button button;
 
                 Intent intent=new Intent(MainActivity.this,juego.class);
 
-                intent.putExtra(NOMBRE,editText.getText().toString());
+             //   intent.putExtra("numero",editText.getText().toString());
+                intent.putExtra("numero",editText.getText()+"");
                 startActivity(intent);
 
 

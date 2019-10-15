@@ -1,5 +1,6 @@
 package com.example.practjuego;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,14 +13,14 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import static com.example.practjuego.MainActivity.NOMBRE;
 
 public class juego extends AppCompatActivity {
     GridLayout g;
     Button b;
-    TextView t;
+    TextView t,ta;
     SeekBar seekBar;
     int n=0;
+    //int[] num=null;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,21 +30,25 @@ public class juego extends AppCompatActivity {
 
 
         crear();
-        seekBar=new SeekBar(this);
-        seekBar.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
-       // seekBar.setOnSeekBarChangeListener();
-        seekBar.setId(View.generateViewId());
-        g.addView(seekBar);
+
     }
     public void crear() {
-     //  n=Integer.parseInt(String.valueOf(getIntent().getExtras()));
 
-        n = 2;
-        for (int i = 0; i < n; i++) {
-            sumar();
-            texto();
+       n= Integer.parseInt(getIntent().getStringExtra("numero"));
+
+        for (int i = 1; i <= n; i++) {
             restar();
+            texto();
+            sumar();
+            ta=new TextView(this);
+            ta.setText("Jug"+i);
+            g.addView(ta);
             if(i==n){
+                seekBar=new SeekBar(this);
+                seekBar.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
+                // seekBar.setOnSeekBarChangeListener();
+                seekBar.setId(View.generateViewId());
+                g.addView(seekBar);
                 b=new Button(this);
                 b.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
                 b.setText("RESET");
@@ -51,7 +56,8 @@ public class juego extends AppCompatActivity {
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                    //boton reset para poner a cero los text
+                    g.removeAllViews();
+                        crear();
 
 
 
@@ -69,12 +75,18 @@ public class juego extends AppCompatActivity {
         b.setText("+");
         b.setId(View.generateViewId());
         b.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceType")
             @Override
             public void onClick(View v) {
                // ((Button)v).setVisibility(View.GONE);
                 //suma a su text correspondiente 1
+               // t.getId();
+                /*t=findViewById(i);
+                t.setText((Integer.parseInt((String) t.getText()))+1)+"");*/
+
             }
         });
+
         g.addView(b);
     }
     public void restar()
@@ -96,27 +108,11 @@ public class juego extends AppCompatActivity {
         t=new TextView(this);
         t.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
         t.setText("0");
+
         t.setId(View.generateViewId());
+
         g.addView(t);
     }
-   /* @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if ( requestCode==VUELVO_DE_MULT && resultCode==RESULT_OK){
-            String nombre = data.getStringExtra(NOMBRE);
-            int res= Integer.parseInt(nombre)*2;
-
-            textViewResultado.setText( String.valueOf(res));
-        }
-        if ( requestCode==VUELVO_DE_DIV && resultCode==RESULT_OK){
-            String nombre = data.getStringExtra(NOMBRE);
-            int res= Integer.parseInt(nombre)/2;
-            textViewResultado.setText(String.valueOf(res));
-        }
-
-
-    }*/
 
 }

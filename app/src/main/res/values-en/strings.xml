@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">PractJuego</string>
     <string name="jugTitleEsp">" Number of players"</string>
+    <string name="jugar">Play</string>
 </resources>

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">PractJuego</string>
     <string name="jugTitleEsp">Nº De Jugadores</string>
+    <string name="jugar">Jugar</string>
 </resources>

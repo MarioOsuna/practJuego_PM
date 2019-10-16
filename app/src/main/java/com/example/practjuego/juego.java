@@ -3,6 +3,7 @@ package com.example.practjuego;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -37,18 +38,93 @@ public class juego extends AppCompatActivity {
        n= Integer.parseInt(getIntent().getStringExtra("numero"));
 
         for (int i = 1; i <= n; i++) {
-            restar();
-            texto();
-            sumar();
+           // restar();
+           // texto();
+          // sumar();
+
+            //resta
+            b=new Button(this);
+            b.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
+            b.setText("-");
+            b.setId(View.generateViewId());
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //((Button)v).setVisibility(View.GONE);
+                    //resta a su text correspondiente 1
+                    if(Integer.parseInt(t.getText()+"")>0)
+                    {
+                        ((TextView)t).setText(String.valueOf(Integer.parseInt(t.getText() + "") - 1));
+                    }
+                }
+            });
+            g.addView(b);
+            //fin de resta
+
+            //texto
+            t=new TextView(this);
+            t.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
+            t.setText("0");
+
+            t.setId(View.generateViewId());
+
+            g.addView(t);
+            //fin de texto
+
+            //suma
+            b=new Button(this);
+            b.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
+            b.setText("+");
+            b.setId(View.generateViewId());
+            b.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("ResourceType")
+                @Override
+                public void onClick(View v) {
+                    t.setText(String.valueOf(Integer.parseInt(t.getText()+"")+1));
+
+                }
+            });
+
+            g.addView(b);
+            //fin de suma
+            //texto para indicar el número de jugador
             ta=new TextView(this);
             ta.setText("Jug"+i);
             g.addView(ta);
+            //comprobamos si ya hemos introducido a todos los jugadores y creamos el seekbar y el boton reset
             if(i==n){
-                seekBar=new SeekBar(this);
+               /* seekBar=new SeekBar(this);
                 seekBar.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
                 // seekBar.setOnSeekBarChangeListener();
                 seekBar.setId(View.generateViewId());
-                g.addView(seekBar);
+                g.addView(seekBar);*/
+
+               //seekbar
+                seekBar=new SeekBar(this);
+                seekBar.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
+
+                seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        //textView.setText(String.valueOf(progress));
+                        //textView.setTextSize(progress);
+
+                       //textView.setTextSize(TypedValue.COMPLEX_UNIT_PX,progress);
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        // textView.setTextSize(TypedValue.COMPLEX_UNIT_PX,seekBar.getProgress());
+
+                    }
+                });
+                //fin seekbar
+               //boton de reset
                 b=new Button(this);
                 b.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
                 b.setText("RESET");
@@ -64,6 +140,7 @@ public class juego extends AppCompatActivity {
                     }
                 });
                 g.addView(b);
+                //fin de reset
             }
 
         }

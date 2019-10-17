@@ -20,55 +20,119 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class juego extends AppCompatActivity {
     GridLayout g;
-    Button b1,b2,b3;
-    TextView t,ta;
+    Button b3;
     SeekBar seekBar;
-    int n=0;
-    int[] btnMas;
-    int[] btnMen;
-    int[] txt;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_juego);
 
-        g=findViewById(R.id.GridLayout);
-        //seekBar= (SeekBar) findViewById(R.id.simpleSeekBar);
+        g = findViewById(R.id.GridLayout);
+        seekBar = findViewById(R.id.seekBar);
+        int n;
+        n = Integer.parseInt(getIntent().getStringExtra("numero"));
+         final Button b1[] = new Button[n];
+         final Button b2[] = new Button[n];
+         final TextView t[]= new TextView[n];
+         final  TextView ta[]=new TextView[n];
 
-        crear();
+        for (int i = 0; i < n; i++) {
 
-    }
-    public void crear() {
+            //crear botón menos
+            b1[i] = new Button(this);
+            b1[i].setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            b1[i].setText("-");
+            b1[i].setBackgroundResource(R.drawable.boton_redondo);
+            b1[i].setId(View.generateViewId());
+            g.addView(b1[i]);
 
-       n= Integer.parseInt(getIntent().getStringExtra("numero"));
+            //crear textview
+            t[i] = new TextView(this);
+            t[i].setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            t[i].setText("0");
+            t[i].setTextSize(30);
+            t[i].setId(View.generateViewId());
+            t[i].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            g.addView(t[i]);
 
 
-        for (int i = 1; i <= n; i++) {
-            restar();
-            texto(i);
-            sumar();
+            //crear boton más
+            b2[i] = new Button(this);
+            b2[i].setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            b2[i].setText("+");
+            b2[i].setBackgroundResource(R.drawable.boton_redondo);
+            b2[i].setId(View.generateViewId());
+            g.addView(b2[i]);
+
 
             //texto para indicar el número de jugador
-            ta=new TextView(this);
-            ta.setText("Jug"+i);
-            g.addView(ta);
+            ta[i] = new TextView(this);
+            ta[i].setText("Jug" + (i+1));
+            ta[i].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            g.addView(ta[i]);
 
-            //comprobamos si ya hemos introducido a todos los jugadores y creamos el seekbar y el boton reset
-            if(i==n){
+            //click boton menos
+           final int finalI = i;
+            b1[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //compruebe que el textview no sea menor a 0
+                    if (Integer.parseInt(t[finalI].getText() + "") > 0) {
 
-               //seekbar
-                seekBar=new SeekBar(this);
-                seekBar.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
+                        t[finalI].setText(String.valueOf(Integer.parseInt(t[finalI].getText().toString()) - 1));
+                    }
+                }
+            });
 
-                seekBar.setMax(100);
+            //click boton más
+            final int finalI1 = i;
+            b2[i].setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    t[finalI1].setText(String.valueOf(Integer.parseInt(t[finalI1].getText().toString()) + 1));
+
+                }
+            });
+            //comprobamos si ya hemos introducido a todos los jugadores y creamos el boton reset
+            if ((i+1) == n) {
+
+                //boton de reset
+                b3 = new Button(this);
+
+                b3.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                b3.setText("RESET");
+                b3.setId(View.generateViewId());
+
+                final int finalN = n;
+                b3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        for (int a = 0; a < finalN; a++)
+                        {
+                            t[a].setText("0");
+                        }
+
+
+                    }
+                });
+                g.addView(b3);
+                //fin de reset
+
+                //recorro todos los elementos para agrandarlos o disminuirlos
                 seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        for (int a = 0; a < finalN; a++)
+                        {
+                            b1[a].setTextSize(TypedValue.COMPLEX_UNIT_PX,progress);
+                            b2[a].setTextSize(TypedValue.COMPLEX_UNIT_PX,progress);
+                            t[a].setTextSize(TypedValue.COMPLEX_UNIT_PX,progress);
+                            ta[a].setTextSize(TypedValue.COMPLEX_UNIT_PX,progress);
+                        }
 
-                        ((Button)b1).setTextSize(TypedValue.COMPLEX_UNIT_PX,progress);
-                        ((Button)b2).setTextSize(TypedValue.COMPLEX_UNIT_PX,progress);
-                         t.setTextSize(TypedValue.COMPLEX_UNIT_PX,progress);
-                         ta.setTextSize(TypedValue.COMPLEX_UNIT_PX,progress);
+                        b3.setTextSize(TypedValue.COMPLEX_UNIT_PX,progress);
                     }
 
                     @Override
@@ -78,85 +142,18 @@ public class juego extends AppCompatActivity {
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-                         //textView.setTextSize(TypedValue.COMPLEX_UNIT_PX,seekBar.getProgress());
+                        //textView.setTextSize(TypedValue.COMPLEX_UNIT_PX,seekBar.getProgress());
 
                     }
                 });
-                g.addView(seekBar);
-                //fin seekbar
-
-               //boton de reset
-                b3=new Button(this);
-
-                b3.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
-                b3.setText("RESET");
-                b3.setId(View.generateViewId());
-                b3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                    g.removeAllViews();
-                        crear();
 
 
-
-                    }
-                });
-                g.addView(b3);
-                //fin de reset
             }
+
 
         }
+
+
     }
-    public void sumar(){
-
-        b2=new Button(this);
-        b2.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
-        b2.setText("+");
-        b2.setBackgroundResource(R.drawable.boton_redondo);
-        b2.setId(View.generateViewId());
-
-        b2.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("ResourceType")
-            @Override
-            public void onClick(View v) {
-              t=findViewById(t.getId());
-                t.setText(String.valueOf(Integer.parseInt(t.getText()+"")+1));
-
-            }
-        });
-
-        g.addView(b2);
-    }
-    public void restar()
-    {
-        b1=new Button(this);
-        b1.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
-        b1.setText("-");
-        b1.setBackgroundResource(R.drawable.boton_redondo);
-        b1.setId(View.generateViewId());
-        b1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(Integer.parseInt(t.getText()+"")>0)
-                {
-                    t=findViewById(t.getId());
-                    ((TextView)t).setText(String.valueOf(Integer.parseInt(t.getText() + "") - 1));
-                }
-            }
-        });
-        g.addView(b1);
-    }
-    public void texto(int i){
-        t=new TextView(this);
-        t.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
-        t.setText("0");
-        t.setTextSize(20);
-
-        t.setId(View.generateViewId());
-       // num[i]=t.getId();
-        t.setGravity(Gravity.CENTER_VERTICAL);
-        g.addView(t);
-    }
-
 
 }

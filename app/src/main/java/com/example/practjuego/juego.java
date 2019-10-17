@@ -24,13 +24,16 @@ public class juego extends AppCompatActivity {
     TextView t,ta;
     SeekBar seekBar;
     int n=0;
+    int[] btnMas;
+    int[] btnMen;
+    int[] txt;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_juego);
 
         g=findViewById(R.id.GridLayout);
-
+        //seekBar= (SeekBar) findViewById(R.id.simpleSeekBar);
 
         crear();
 
@@ -42,7 +45,7 @@ public class juego extends AppCompatActivity {
 
         for (int i = 1; i <= n; i++) {
             restar();
-            texto();
+            texto(i);
             sumar();
 
             //texto para indicar el número de jugador
@@ -116,7 +119,7 @@ public class juego extends AppCompatActivity {
             @SuppressLint("ResourceType")
             @Override
             public void onClick(View v) {
-              
+              t=findViewById(t.getId());
                 t.setText(String.valueOf(Integer.parseInt(t.getText()+"")+1));
 
             }
@@ -136,19 +139,21 @@ public class juego extends AppCompatActivity {
             public void onClick(View v) {
                 if(Integer.parseInt(t.getText()+"")>0)
                 {
+                    t=findViewById(t.getId());
                     ((TextView)t).setText(String.valueOf(Integer.parseInt(t.getText() + "") - 1));
                 }
             }
         });
         g.addView(b1);
     }
-    public void texto(){
+    public void texto(int i){
         t=new TextView(this);
         t.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
         t.setText("0");
         t.setTextSize(20);
 
         t.setId(View.generateViewId());
+       // num[i]=t.getId();
         t.setGravity(Gravity.CENTER_VERTICAL);
         g.addView(t);
     }
